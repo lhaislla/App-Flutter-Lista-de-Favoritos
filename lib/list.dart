@@ -20,9 +20,9 @@ class RandomWordsState extends State<RandomWords> {
         title: const Text('Lista de palavras'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.list),
             onPressed: _pushSaved,
-            tooltip: 'Saved Suggestions',
+            icon: const Icon(Icons.list),
+            tooltip: 'Salvar Sugestões',
           ),
           IconButton(
             onPressed: (() {
@@ -38,28 +38,6 @@ class RandomWordsState extends State<RandomWords> {
         ],
       ),
       body: _buildSuggestions(statusBotao),
-    );
-  }
-
-  Widget _buildRow(WordPair pair, int index) {
-    final statusSalvar = _saved.contains(pair);
-    return ListTile(
-      title: Text(
-        _suggestions[index].asPascalCase,
-        style: _biggerFont,
-      ),
-      trailing: Icon(statusSalvar ? Icons.favorite : Icons.favorite_border,
-          color: statusSalvar ? Colors.red : null,
-          semanticLabel: statusSalvar ? 'Remover' : 'Salvar'),
-      onTap: () {
-        setState(() {
-          if (statusSalvar) {
-            _saved.remove(_suggestions[index]);
-          } else {
-            _saved.add(_suggestions[index]);
-          }
-        });
-      },
     );
   }
 
@@ -81,8 +59,33 @@ class RandomWordsState extends State<RandomWords> {
     }
   }
 
+  Widget _buildRow(WordPair pair, int index) {
+    final alreadySaved = _saved.contains(_suggestions[index]);
+    return ListTile(
+      title: Text(
+        _suggestions[index].asPascalCase,
+        style: _biggerFont,
+      ),
+      trailing: IconButton(
+          icon: Icon(alreadySaved ? Icons.favorite : Icons.favorite_border,
+              color: alreadySaved ? Colors.red : null,
+              semanticLabel: alreadySaved ? 'Remover' : 'Salvar'),
+          tooltip: "Favorito",
+          onPressed: () {
+            setState(() {
+              if (alreadySaved) {
+                _saved.remove(_suggestions[index]);
+              } else {
+                _saved.add(_suggestions[index]);
+              }
+            });
+          }),
+    );
+  }
+
   Widget _addContainer() {
     return GridView.builder(
+        shrinkWrap: statusBotao,
         padding: const EdgeInsets.all(10),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -107,7 +110,7 @@ class RandomWordsState extends State<RandomWords> {
       MaterialPageRoute(
         builder: (BuildContext context) {
           final tiles = _saved.map(
-            (WordPair pair) {
+            (pair) {
               return ListTile(
                 title: Text(pair.asPascalCase, style: _biggerFont),
               );

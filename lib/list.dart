@@ -90,26 +90,59 @@ class RandomWordsState extends State<RandomWords> {
 
   Widget _buildRow(WordPair pair, int index) {
     final alreadySaved = _saved.contains(_suggestions[index]);
-    return ListTile(
-      title: Text(
-        _suggestions[index].asPascalCase,
-        style: _biggerFont,
-      ),
-      trailing: IconButton(
-          icon: Icon(alreadySaved ? Icons.favorite : Icons.favorite_border,
-              color: alreadySaved ? Colors.red : null,
-              semanticLabel: alreadySaved ? 'Remover' : 'Salvar'),
-          tooltip: "Favorito",
-          onPressed: () {
-            setState(() {
-              if (alreadySaved) {
-                _saved.remove(_suggestions[index]);
-              } else {
-                _saved.add(_suggestions[index]);
-              }
-            });
-          }),
-    );
+    final item = pair.asPascalCase;
+    return Dismissible(
+        key: Key(item),
+        direction: DismissDirection.endToStart,
+        onDismissed: (direction) {
+          setState(() {
+            if (alreadySaved) {
+              _saved.remove(_suggestions[index]);
+            }
+            _suggestions.removeAt(index);
+          });
+        },
+        background: Container(
+          color: Colors.red,
+          padding: const EdgeInsets.all(8.0),
+          alignment: Alignment.centerRight,
+          // ignore: prefer_const_constructors
+          child: Text(
+            "Excluir",
+            // ignore: prefer_const_constructors
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        child: ListTile(
+          title: Text(
+            _suggestions[index].asPascalCase,
+            style: _biggerFont,
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, '/Edit',
+                arguments: _suggestions[index]);
+          },
+          trailing: IconButton(
+              icon: Icon(alreadySaved ? Icons.favorite : Icons.favorite_border,
+                  color: alreadySaved ? Colors.red : null,
+                  semanticLabel: alreadySaved ? 'Remove from saved' : 'Save'),
+              tooltip: "Favorite",
+              hoverColor: Colors.red,
+              onPressed: () {
+                setState(() {
+                  if (alreadySaved) {
+                    _saved.remove(_suggestions[index]);
+                  } else {
+                    _saved.add(_suggestions[index]);
+                    debugPrint(_suggestions[index].first);
+                    debugPrint(_suggestions[index].second);
+                  }
+                });
+              }),
+        ));
   }
 
   Widget _addContainer() {

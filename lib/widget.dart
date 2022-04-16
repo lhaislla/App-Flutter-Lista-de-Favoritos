@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'edit.dart';
 import 'list.dart';
 
 class MyApp extends StatelessWidget {
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: const RandomWords(),
+      routes: {'/Edit': (context) => const Editar()},
     );
   }
 }

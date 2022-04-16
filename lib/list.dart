@@ -41,6 +41,35 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
+  void _pushSaved() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          final tiles = _saved.map(
+            (pair) {
+              return ListTile(
+                title: Text(pair.asPascalCase, style: _biggerFont),
+              );
+            },
+          );
+          final divided = tiles.isNotEmpty
+              ? ListTile.divideTiles(
+                  context: context,
+                  tiles: tiles,
+                ).toList()
+              : <Widget>[];
+
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Salvando Sugestões'),
+            ),
+            body: ListView(children: divided),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildSuggestions(bool statusBotao) {
     if (statusBotao == false) {
       return ListView.builder(
@@ -103,34 +132,5 @@ class RandomWordsState extends State<RandomWords> {
             color: Colors.white30,
           );
         });
-  }
-
-  void _pushSaved() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (BuildContext context) {
-          final tiles = _saved.map(
-            (pair) {
-              return ListTile(
-                title: Text(pair.asPascalCase, style: _biggerFont),
-              );
-            },
-          );
-          final divided = tiles.isNotEmpty
-              ? ListTile.divideTiles(
-                  context: context,
-                  tiles: tiles,
-                ).toList()
-              : <Widget>[];
-
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Salvando Sugestões'),
-            ),
-            body: ListView(children: divided),
-          );
-        },
-      ),
-    );
   }
 }

@@ -1,4 +1,4 @@
-#Sat Apr 16 12:24:23 BRT 2022
+#Sat Apr 16 15:12:36 BRT 2022
 base.0=/home/lhaislla/Documentos/app_favorito_dsi/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

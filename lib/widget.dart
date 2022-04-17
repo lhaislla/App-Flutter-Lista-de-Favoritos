@@ -8,15 +8,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Gerador de palavras',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
         ),
       ),
-      home: const RandomWords(),
-      routes: {'/Edit': (context) => const Editar()},
+      initialRoute: '/',
+      routes: {
+        RandomWords.routeName: (context) => const RandomWords(),
+        Editar.routeName: (context) => const Editar()
+      },
     );
   }
 }

@@ -1,8 +1,9 @@
+import 'package:app_favorito_dsi/repository.dart';
 import 'package:flutter/material.dart';
 
 class Editar extends StatefulWidget {
+  static const routeName = '/edit';
   const Editar({Key? key}) : super(key: key);
-
   @override
   State<Editar> createState() => _EditarState();
 }
@@ -10,9 +11,15 @@ class Editar extends StatefulWidget {
 class _EditarState extends State<Editar> {
   @override
   Widget build(BuildContext context) {
+    final temp = (ModalRoute.of(context)?.settings.arguments ??
+        <List, ParPalavra>{}) as Map;
+    var palavra = temp['palavra'];
+    List<ParPalavra> parPalavra;
+    parPalavra = temp['parPalavra'];
+    final TextEditingController palavraUm = TextEditingController();
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Edit Word'),
+          title: const Text('Editar Palavra'),
         ),
         body: Container(
           padding: const EdgeInsets.all(20.0),
@@ -21,9 +28,10 @@ class _EditarState extends State<Editar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
-                decoration: const InputDecoration(
-                    hintText: "Ensira a primeira palavra"),
-              ),
+                  keyboardType: TextInputType.text,
+                  decoration:
+                      const InputDecoration(hintText: "Insira apalavra"),
+                  controller: palavraUm),
               Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -31,9 +39,22 @@ class _EditarState extends State<Editar> {
                       style: ElevatedButton.styleFrom(
                           primary: Colors.red, fixedSize: const Size(100, 40)),
                       onPressed: () {
-                        Navigator.pop(
-                          context,
-                        );
+                        setState(() {
+                          if (palavra == true) {
+                            parPalavra.insert(0, ParPalavra(palavraUm.text));
+                            palavra == false;
+                          } else {
+                            if (palavra == null) {
+                              palavra == false;
+                            } else {
+                              parPalavra[parPalavra.indexOf(palavra)] =
+                                  ParPalavra(palavraUm.text);
+                              palavra == false;
+                            }
+                            palavra == false;
+                          }
+                        });
+                        Navigator.popAndPushNamed(context, '/');
                       },
                       child: const Text(
                         'Enviar',

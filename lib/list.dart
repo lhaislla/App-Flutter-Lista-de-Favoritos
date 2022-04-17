@@ -1,17 +1,14 @@
-import 'package:english_words/english_words.dart';
+import 'package:app_favorito_dsi/repository.dart';
 import 'package:flutter/material.dart';
 
-class RandomWords extends StatefulWidget {
-  const RandomWords({Key? key}) : super(key: key);
-  @override
-  RandomWordsState createState() => RandomWordsState();
-}
+ParPalavraRepository repositoryParPalavra = ParPalavraRepository();
 
 class RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
+  final _suggestions = <ParPalavra>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
-  final Set<WordPair> _saved = <WordPair>{};
+  final Set<ParPalavra> _saved = <ParPalavra>{};
   bool statusBotao = false;
+  bool editMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +29,21 @@ class RandomWordsState extends State<RandomWords> {
                 statusBotao = false;
               }
             }),
-            tooltip: statusBotao ? 'List' : 'Card',
+            tooltip: statusBotao ? 'Lista' : 'Card',
             icon: const Icon(Icons.apps_outlined),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: 'Adicionar nova palavra',
+            onPressed: () {
+              editMode = true;
+              setState(() {
+                Navigator.popAndPushNamed(context, '/edit', arguments: {
+                  'parPalavra': repositoryParPalavra.getAll(),
+                  'palavra': editMode
+                });
+              });
+            },
           ),
         ],
       ),
@@ -61,7 +71,7 @@ class RandomWordsState extends State<RandomWords> {
 
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Salvando Sugestões'),
+              title: const Text('Favoritos Salvos'),
             ),
             body: ListView(children: divided),
           );
@@ -77,10 +87,10 @@ class RandomWordsState extends State<RandomWords> {
         itemBuilder: (context, i) {
           if (i.isOdd) return const Divider();
           final index = i ~/ 2;
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10));
+          if (index >= repositoryParPalavra.getAll().length) {
+            repositoryParPalavra.criaParPalavra(10);
           }
-          return _buildRow(_suggestions[index], index);
+          return _buildRow((repositoryParPalavra.getIndex(index)));
         },
       );
     } else {
@@ -88,18 +98,17 @@ class RandomWordsState extends State<RandomWords> {
     }
   }
 
-  Widget _buildRow(WordPair pair, int index) {
-    final alreadySaved = _saved.contains(_suggestions[index]);
-    final item = pair.asPascalCase;
+  Widget _buildRow(ParPalavra pair) {
+    final alreadySaved = _saved.contains(pair);
     return Dismissible(
-        key: Key(item),
+        key: Key(pair.toString()),
         direction: DismissDirection.endToStart,
         onDismissed: (direction) {
           setState(() {
             if (alreadySaved) {
-              _saved.remove(_suggestions[index]);
+              _saved.remove(pair);
             }
-            _suggestions.removeAt(index);
+            repositoryParPalavra.removePalavra(pair);
           });
         },
         background: Container(
@@ -117,32 +126,34 @@ class RandomWordsState extends State<RandomWords> {
           ),
         ),
         child: ListTile(
-          title: Text(
-            _suggestions[index].asPascalCase,
-            style: _biggerFont,
-          ),
-          onTap: () {
-            Navigator.pushNamed(context, '/Edit',
-                arguments: _suggestions[index]);
-          },
-          trailing: IconButton(
-              icon: Icon(alreadySaved ? Icons.favorite : Icons.favorite_border,
-                  color: alreadySaved ? Colors.red : null,
-                  semanticLabel: alreadySaved ? 'Remove from saved' : 'Save'),
-              tooltip: "Favorite",
-              hoverColor: Colors.red,
-              onPressed: () {
-                setState(() {
-                  if (alreadySaved) {
-                    _saved.remove(_suggestions[index]);
-                  } else {
-                    _saved.add(_suggestions[index]);
-                    debugPrint(_suggestions[index].first);
-                    debugPrint(_suggestions[index].second);
-                  }
+            title: Text(
+              pair.asPascalCase,
+              style: _biggerFont,
+            ),
+            trailing: IconButton(
+                icon: Icon(
+                    alreadySaved ? Icons.favorite : Icons.favorite_border,
+                    color: alreadySaved ? Colors.red : null,
+                    semanticLabel: alreadySaved ? 'Remover' : 'Salvar'),
+                tooltip: "Favoritar",
+                hoverColor: Colors.red,
+                onPressed: () {
+                  setState(() {
+                    if (alreadySaved) {
+                      _saved.remove(pair);
+                    } else {
+                      _saved.add(pair);
+                    }
+                  });
+                }),
+            onTap: () {
+              setState(() {
+                Navigator.popAndPushNamed(context, '/edit', arguments: {
+                  'parPalavra': repositoryParPalavra.getAll(),
+                  'palavra': pair,
                 });
-              }),
-        ));
+              });
+            }));
   }
 
   Widget _addContainer() {
@@ -155,15 +166,22 @@ class RandomWordsState extends State<RandomWords> {
           mainAxisSpacing: 2,
           childAspectRatio: 1,
         ),
-        itemCount: _suggestions.length,
         itemBuilder: (context, index) {
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(20));
+          if (index >= repositoryParPalavra.getAll().length) {
+            repositoryParPalavra.criaParPalavra(10);
           }
           return Container(
-            child: Center(child: (_buildRow(_suggestions[index], index))),
+            child: Center(
+                child: (_buildRow(repositoryParPalavra.getIndex(index)))),
             color: Colors.white30,
           );
         });
   }
+}
+
+class RandomWords extends StatefulWidget {
+  const RandomWords({Key? key}) : super(key: key);
+  static const routeName = '/';
+  @override
+  RandomWordsState createState() => RandomWordsState();
 }

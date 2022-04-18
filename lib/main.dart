@@ -11,8 +11,7 @@ void main() async {
           appId: '1:889939815861:android:888bf87a761dc461027dfc',
           messagingSenderId: '889939815861',
           projectId: 'palavras-7a041'));
-  FirebaseFirestore.instance
-      .collection("Parpalavra")
-      .doc("palavra")
-      .set({"Parpalavra": "Test"});
+  FirebaseFirestore.instance;
+  var collection = FirebaseFirestore.instance.collection('Parpalavra');
+  collection.doc("palavra").set({"Parpalavra": "Test"});
 }

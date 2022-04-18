@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "889939815861",
+    "project_id": "palavras-7a041",
+    "storage_bucket": "palavras-7a041.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889939815861:android:888bf87a761dc461027dfc",
+        "android_client_info": {
+          "package_name": "com.example.app_favorito_dsi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889939815861-f508sm740d8qde48pikbogtvv0ecijph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaFo6b1cvDK2N8kYZntQ4DIk_hsq5Ciis"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889939815861-f508sm740d8qde48pikbogtvv0ecijph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

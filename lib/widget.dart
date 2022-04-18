@@ -4,6 +4,8 @@ import 'list.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+  static const home = RandomWords.routeName;
+  static const edicao = Editar.routeName;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        RandomWords.routeName: (context) => const RandomWords(),
-        Editar.routeName: (context) => const Editar()
+        home: (context) => const RandomWords(),
+        edicao: (context) => const Editar()
       },
     );
   }

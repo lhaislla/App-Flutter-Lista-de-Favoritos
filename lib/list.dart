@@ -2,14 +2,12 @@ import 'package:app_favorito_dsi/repository.dart';
 import 'package:flutter/material.dart';
 
 ParPalavraRepository repositoryParPalavra = ParPalavraRepository();
+final _biggerFont = const TextStyle(fontSize: 18.0);
+final Set<ParPalavra> _saved = <ParPalavra>{};
+bool statusBotao = false;
+bool editMode = false;
 
 class RandomWordsState extends State<RandomWords> {
-  final _suggestions = <ParPalavra>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-  final Set<ParPalavra> _saved = <ParPalavra>{};
-  bool statusBotao = false;
-  bool editMode = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,7 +134,7 @@ class RandomWordsState extends State<RandomWords> {
                     color: alreadySaved ? Colors.red : null,
                     semanticLabel: alreadySaved ? 'Remover' : 'Salvar'),
                 tooltip: "Favoritar",
-                hoverColor: Colors.red,
+                hoverColor: Colors.white10,
                 onPressed: () {
                   setState(() {
                     if (alreadySaved) {

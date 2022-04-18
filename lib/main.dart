@@ -4,11 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
+  runApp(const MyApp());
   await Firebase.initializeApp();
   FirebaseFirestore.instance
       .collection("Parpalavra")
-      .doc()
+      .doc("palavra")
       .set({"Parpalavra": "Test"});
-
-  runApp(const MyApp());
 }

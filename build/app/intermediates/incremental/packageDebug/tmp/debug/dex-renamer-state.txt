@@ -1,4 +1,0 @@
-#Sun Apr 17 19:32:35 BRT 2022
-base.0=/home/lhaislla/Documentos/app_favorito_dsi/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-renamed.0=classes.dex
-path.0=classes.dex

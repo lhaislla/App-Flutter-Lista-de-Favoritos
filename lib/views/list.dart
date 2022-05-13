@@ -1,11 +1,19 @@
-import 'package:app_favorito_dsi/repository.dart';
+import 'package:app_favorito_dsi/repositories/repository.dart';
+
 import 'package:flutter/material.dart';
 
 ParPalavraRepository repositoryParPalavra = ParPalavraRepository();
-final _biggerFont = const TextStyle(fontSize: 18.0);
+const _biggerFont = TextStyle(fontSize: 18.0);
 final Set<ParPalavra> _saved = <ParPalavra>{};
 bool statusBotao = false;
 bool editMode = false;
+
+class RandomWords extends StatefulWidget {
+  const RandomWords({Key? key}) : super(key: key);
+  static const routeName = '/';
+  @override
+  RandomWordsState createState() => RandomWordsState();
+}
 
 class RandomWordsState extends State<RandomWords> {
   @override
@@ -20,15 +28,17 @@ class RandomWordsState extends State<RandomWords> {
             tooltip: 'Salvar Sugestões',
           ),
           IconButton(
-            onPressed: (() {
-              if (statusBotao == false) {
-                statusBotao = true;
-              } else if (statusBotao == true) {
-                statusBotao = false;
-              }
-            }),
             tooltip: statusBotao ? 'Lista' : 'Card',
             icon: const Icon(Icons.apps_outlined),
+            onPressed: (() {
+              setState(() {
+                if (statusBotao == false) {
+                  statusBotao = true;
+                } else if (statusBotao == true) {
+                  statusBotao = false;
+                }
+              });
+            }),
           ),
           IconButton(
             icon: const Icon(Icons.add),
@@ -92,7 +102,7 @@ class RandomWordsState extends State<RandomWords> {
         },
       );
     } else {
-      return _addContainer();
+      return _addGridView();
     }
   }
 
@@ -154,10 +164,10 @@ class RandomWordsState extends State<RandomWords> {
             }));
   }
 
-  Widget _addContainer() {
+  Widget _addGridView() {
     return GridView.builder(
-        shrinkWrap: statusBotao,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(20),
+        //shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 2,
@@ -166,20 +176,14 @@ class RandomWordsState extends State<RandomWords> {
         ),
         itemBuilder: (context, index) {
           if (index >= repositoryParPalavra.getAll().length) {
-            repositoryParPalavra.criaParPalavra(10);
+            repositoryParPalavra.criaParPalavra(5);
           }
-          return Container(
+          return Card(
+            elevation: 15,
             child: Center(
                 child: (_buildRow(repositoryParPalavra.getIndex(index)))),
-            color: Colors.white30,
+            color: Colors.white,
           );
         });
   }
-}
-
-class RandomWords extends StatefulWidget {
-  const RandomWords({Key? key}) : super(key: key);
-  static const routeName = '/';
-  @override
-  RandomWordsState createState() => RandomWordsState();
 }
